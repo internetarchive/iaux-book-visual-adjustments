@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Visual Adjustments</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      body {
+        color: #ffffff;
+        background: #181818;
+      }
+    }
+    :root {
+      --menuButtonLabelDisplay: block;
+      --menuSliderBg: #151515;
+      --primaryTextColor: #fff;
+      --menuWidth: 320px;
+      --animationTiming: .25s;
+      --iconFillColor: #fff;
+      --iconStrokeColor: #fff;
+      --activeButtonBg: #282828;
+    }
+
+    html {
+      font: normal 10px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    button {
+      height: 2rem;
+      margin: 1rem;
+      grid-column: 1 / 2;
+    }
+
+    main {
+      display: grid;
+      height: 100vh;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: 1fr auto;
+    }
+
+    #menu {
+      position: relative;
+      grid-column: 1 / 2;
+      width: var(--menuWidth);
+    }
+
+    picture {
+      display: block;
+      grid-column: 2 / 3;
+      grid-row: 1 / 3;
+    }
+
+    img {
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <button>Toggle menu</button>
+  <main>
+    <div id="menu"></div>
+    <picture>
+      <img src="https://ia801302.us.archive.org/BookReader/BookReaderImages.php?zip=/29/items/goody/goody_jp2.zip&file=goody_jp2/goody_0074.jp2&id=goody&scale=4&rotate=0" />
+    </picture>
+  </main>
+
+  <script type="module">
+    import { render } from 'lit-html';
+    import { html, css, LitElement } from 'lit-element';
+    import IAIcons from '@internetarchive/ia-icons';
+    import '@internetarchive/ia-menu-slider/ia-menu-slider';
+    import '../ia-book-visual-adjustments.js';
+
+    customElements.define('ia-icon', class extends IAIcons {
+      static get styles() {
+        return [css`
+          svg {
+            width: 40px;
+            height: 40px;
+          }
+        `, IAIcons.styles];
+      }
+    });
+
+    const menuSlider = document.createElement('ia-menu-slider');
+    const adjustmentMenu = {
+      icon: html`
+        <ia-icon icon="share"></ia-icon>
+      `,
+      label: 'Visual Adjustments',
+      id: 'adjustment',
+      component: html`<ia-book-visual-adjustments></ia-book-visual-adjustments>`
+    };
+    menuSlider.menus = [adjustmentMenu];
+    menuSlider.open = true;
+    menuSlider.selectedMenu = adjustmentMenu.id;
+
+    document.querySelector('#menu').appendChild(menuSlider);
+
+    menuSlider.updateComplete.then(() => {
+      // Toggle button for menu drawer
+      document.querySelector('button').addEventListener('click', () => {
+        menuSlider.open = !menuSlider.open;
+      });
+
+      const visualAdjustments = menuSlider.shadowRoot.querySelector('ia-book-visual-adjustments');
+      visualAdjustments.options = [{
+        id: 'contrast',
+        name: 'Use increased contrast',
+        description: 'Pages will display as high-contrast black and white images.',
+        active: false,
+      }, {
+        id: 'invert',
+        name: 'Use inverted colors',
+        description: 'Colors for pages will be inverted. For example, black will display as white.',
+        active: false,
+      }];
+
+      const img = document.querySelector('img');
+
+      document.addEventListener('visualAdjustmentOptionChanged', ({ detail }) => {
+        const adjustments = {
+          invert: "invert(100%)",
+          contrast: "contrast(120%)",
+        };
+        const filters = detail.options.reduce((values, option) => {
+          const newValue = `${option.active ? adjustments[option.id] : ''}`;
+          return newValue ? [...values, newValue] : values;
+        }, []).join(' ');
+
+        img.style.setProperty('filter', filters);
+      });
+    });
+  </script>
+</body>
+</html>

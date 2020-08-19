@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "tags": [
+    {
+      "name": "ia-book-visual-adjustments",
+      "description": "Visual adjustments for BookReader",
+      "properties": [
+        {
+          "name": "options",
+          "type": "Array",
+          "description": "The visual adjustment controls to be rendered",
+          "default": []
+        }
+      ],
+      "events": [],
+      "slots": [],
+      "cssProperties": []
+    }
+  ]
+}

@@ -34,6 +34,14 @@ The only property is an array of options. Each option has these properties:
 }
 ```
 
+## Events
+
+When an option is changed, the 'visualAdjustmentOptionChanged' event is emitted.
+The detail object on the event object receives the complete array of options to
+allow BookReader to collect all active adjustments and add CSS to the image
+containers. An example of listening to this event and altering an image can be
+found in the demo.
+
 ## Linting with ESLint
 To scan the project for linting errors, run
 ```bash
