@@ -80,7 +80,6 @@ export class IABookVisualAdjustments extends LitElement {
         </div>
         <a href="#" class="close" @click=${this.unsetSelectedMenuOption}>${closeIcon}</a>
       </header>
-      <p>Visual adjustments can be used together or individually.</p>
       <ul>${this.adjustmentCheckboxes}</ul>
     `;
   }
