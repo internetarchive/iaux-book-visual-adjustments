@@ -111,14 +111,20 @@
 
       const visualAdjustments = menuSlider.shadowRoot.querySelector('ia-book-visual-adjustments');
       visualAdjustments.options = [{
+        id: 'grayscale',
+        name: 'Grayscale',
+        active: false,
+      }, {
+        id: 'brightness',
+        name: 'High brightness',
+        active: false,
+      }, {
         id: 'contrast',
         name: 'Use increased contrast',
-        description: 'Pages will display as high-contrast black and white images.',
         active: false,
       }, {
         id: 'invert',
         name: 'Use inverted colors',
-        description: 'Colors for pages will be inverted. For example, black will display as white.',
         active: false,
       }];
 
@@ -126,8 +132,10 @@
 
       document.addEventListener('visualAdjustmentOptionChanged', ({ detail }) => {
         const adjustments = {
-          invert: "invert(100%)",
+          brightness: "brightness(120%)",
           contrast: "contrast(120%)",
+          grayscale: "grayscale(100%)",
+          invert: "invert(100%)",
         };
         const filters = detail.options.reduce((values, option) => {
           const newValue = `${option.active ? adjustments[option.id] : ''}`;
