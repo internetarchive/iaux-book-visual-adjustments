@@ -1,4 +1,5 @@
 import { html, LitElement } from 'lit-element';
+import { repeat } from 'lit-html/directives/repeat.js';
 import bookVisualAdjustmentsCSS from './styles/ia-book-visual-adjustments.js';
 import closeIcon from './icon_close.js';
 
@@ -30,18 +31,16 @@ export class IABookVisualAdjustments extends LitElement {
     return count ? html`<p>(${count} active)</p>` : html``;
   }
 
-  get adjustmentCheckboxes() {
-    return this.options.map((option) => {
-      const formID = `adjustment_${option.id}`;
-      return html`<li>
-        <label for="${formID}">
-          <span class="name">${option.name}</span>
-          <input type="checkbox" name="${formID}" id="${formID}" @change=${() => this.changeActiveStateFor(option.id)} ?checked=${option.active} />
-          <span class="icon"></span>
-        </label>
-        <p>${option.description}</p>
-      </li>`;
-    });
+  adjustmentCheckbox(option) {
+    const formID = `adjustment_${option.id}`;
+    return html`<li>
+      <label for="${formID}">
+        <span class="name">${option.name}</span>
+        <input type="checkbox" name="${formID}" id="${formID}" @change=${() => this.changeActiveStateFor(option.id)} ?checked=${option.active} />
+        <span class="icon"></span>
+      </label>
+      <p>${option.description}</p>
+    </li>`;
   }
 
   changeActiveStateFor(id) {
@@ -80,7 +79,7 @@ export class IABookVisualAdjustments extends LitElement {
         </div>
         <a href="#" class="close" @click=${this.unsetSelectedMenuOption}>${closeIcon}</a>
       </header>
-      <ul>${this.adjustmentCheckboxes}</ul>
+      <ul>${repeat(this.options, option => option.id, this.adjustmentCheckbox.bind(this))}</ul>
     `;
   }
 }
