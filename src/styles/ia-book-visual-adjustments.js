@@ -38,6 +38,8 @@ header div {
 
 a.close {
   justify-self: end;
+  --iconWidth: 18px;
+  --iconHeight: 18px;
 }
 
 ul {

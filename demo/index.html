@@ -19,6 +19,8 @@
       --animationTiming: .25s;
       --iconFillColor: #fff;
       --iconStrokeColor: #fff;
+      --iconWidth: 28px;
+      --iconHeight: 28px;
       --activeButtonBg: #282828;
     }
 
@@ -81,21 +83,38 @@
       static get styles() {
         return [css`
           svg {
-            width: 40px;
-            height: 40px;
+            width: var(--iconWidth);
+            height: var(--iconHeight);
           }
         `, IAIcons.styles];
       }
     });
 
     const menuSlider = document.createElement('ia-menu-slider');
+    const visualAdjustmentOptions = [{
+      id: 'grayscale',
+      name: 'Grayscale',
+      active: false,
+    }, {
+      id: 'brightness',
+      name: 'Increased brightness',
+      active: false,
+    }, {
+      id: 'contrast',
+      name: 'Increased contrast',
+      active: false,
+    }, {
+      id: 'invert',
+      name: 'Inverted colors (negative image)',
+      active: false,
+    }];
     const adjustmentMenu = {
       icon: html`
-        <ia-icon icon="share"></ia-icon>
+        <ia-icon icon="visualAdjustment"></ia-icon>
       `,
       label: 'Visual Adjustments',
       id: 'adjustment',
-      component: html`<ia-book-visual-adjustments></ia-book-visual-adjustments>`
+      component: html`<ia-book-visual-adjustments .options=${visualAdjustmentOptions}></ia-book-visual-adjustments>`
     };
     menuSlider.menus = [adjustmentMenu];
     menuSlider.open = true;
@@ -108,25 +127,6 @@
       document.querySelector('button').addEventListener('click', () => {
         menuSlider.open = !menuSlider.open;
       });
-
-      const visualAdjustments = menuSlider.shadowRoot.querySelector('ia-book-visual-adjustments');
-      visualAdjustments.options = [{
-        id: 'grayscale',
-        name: 'Grayscale',
-        active: false,
-      }, {
-        id: 'brightness',
-        name: 'Increased brightness',
-        active: false,
-      }, {
-        id: 'contrast',
-        name: 'Increased contrast',
-        active: false,
-      }, {
-        id: 'invert',
-        name: 'Inverted colors (negative image)',
-        active: false,
-      }];
 
       const img = document.querySelector('img');
 
