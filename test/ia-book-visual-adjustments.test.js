@@ -12,12 +12,10 @@ customElements.define('ia-book-visual-adjustments', IABookVisualAdjustments);
 const options = [{
   id: 'contrast',
   name: 'Use increased contrast',
-  description: 'Pages will display as high-contrast black and white images.',
   active: true,
 }, {
   id: 'invert',
   name: 'Use inverted colors',
-  description: 'Colors for pages will be inverted. For example, black will display as white.',
   active: false,
 }];
 
@@ -44,10 +42,8 @@ describe('<ia-book-visual-adjustments>', () => {
 
     const label = el.shadowRoot.querySelector('label');
     const name = label.querySelector('.name');
-    const description = label.nextElementSibling;
     const checkbox = label.querySelector('input');
     expect(name.innerText).to.equal(options[0].name);
-    expect(description.innerText).to.equal(options[0].description);
     expect(checkbox.checked).to.equal(true);
   });
 

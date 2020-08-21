@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat.js';
+import { nothing } from 'lit-html';
 import bookVisualAdjustmentsCSS from './styles/ia-book-visual-adjustments.js';
 import closeIcon from './icon_close.js';
 
@@ -28,7 +29,7 @@ export class IABookVisualAdjustments extends LitElement {
 
   get activeAdjustments() {
     const count = this.activeOptions.length;
-    return count ? html`<p>(${count} active)</p>` : html``;
+    return count ? html`<p>(${count} active)</p>` : nothing;
   }
 
   adjustmentCheckbox(option) {
@@ -39,7 +40,6 @@ export class IABookVisualAdjustments extends LitElement {
         <input type="checkbox" name="${formID}" id="${formID}" @change=${() => this.changeActiveStateFor(option.id)} ?checked=${option.active} />
         <span class="icon"></span>
       </label>
-      <p>${option.description}</p>
     </li>`;
   }
 
