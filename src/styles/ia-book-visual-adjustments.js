@@ -38,8 +38,12 @@ header div {
 
 a.close {
   justify-self: end;
-  --iconWidth: 18px;
-  --iconHeight: 18px;
+}
+
+a.close svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--iconFillColor);
 }
 
 ul {

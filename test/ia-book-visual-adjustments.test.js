@@ -129,11 +129,10 @@ describe('<ia-book-visual-adjustments>', () => {
 
   it('sets the updated range value on the options prop', async () => {
     const el = await fixture(container());
-    const id = options[0].id;
-    const initialValue = options[0].value;
+    const { id } = options[0];
     const newValue = 120;
 
-    el.setRangeValue(id, 120);
+    el.setRangeValue(id, newValue);
     await el.updateComplete;
 
     expect(el.options[0].value).to.equal(newValue);
