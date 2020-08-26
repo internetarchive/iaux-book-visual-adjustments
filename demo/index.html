@@ -97,12 +97,20 @@
       active: false,
     }, {
       id: 'brightness',
-      name: 'Increased brightness',
+      name: 'Adjust brightness',
       active: false,
+      min: 0,
+      max: 150,
+      step: 1,
+      value: 100,
     }, {
       id: 'contrast',
-      name: 'Increased contrast',
+      name: 'Adjust contrast',
       active: false,
+      min: 0,
+      max: 150,
+      step: 1,
+      value: 100,
     }, {
       id: 'invert',
       name: 'Inverted colors (negative image)',
@@ -132,13 +140,13 @@
 
       document.addEventListener('visualAdjustmentOptionChanged', ({ detail }) => {
         const adjustments = {
-          brightness: "brightness(120%)",
-          contrast: "contrast(120%)",
-          grayscale: "grayscale(100%)",
-          invert: "invert(100%)",
+          brightness: (value) => `brightness(${value}%)`,
+          contrast: (value) => `contrast(${value}%)`,
+          grayscale: () => "grayscale(100%)",
+          invert: () => "invert(100%)",
         };
         const filters = detail.options.reduce((values, option) => {
-          const newValue = `${option.active ? adjustments[option.id] : ''}`;
+          const newValue = `${option.active ? adjustments[option.id](option.value) : ''}`;
           return newValue ? [...values, newValue] : values;
         }, []).join(' ');
 

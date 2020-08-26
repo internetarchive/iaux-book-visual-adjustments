@@ -31,6 +31,30 @@ export class IABookVisualAdjustments extends LitElement {
     return count ? html`<p>(${count} active)</p>` : nothing;
   }
 
+  setRangeValue(id, value) {
+    const updatedOptions = [...this.options];
+    updatedOptions.find(o => o.id === id).value = value;
+    this.options = [...updatedOptions];
+  }
+
+  rangeSlider(option) {
+    return html`
+      <div class=${`range${option.active ? ' visible' : ''}`}>
+        <input
+          type="range"
+          name="${option.id}_range"
+          min=${option.min || 0}
+          max=${option.max || 100}
+          step=${option.step || 1}
+          .value=${option.value}
+          @input=${e => this.setRangeValue(option.id, e.target.value)}
+          @change=${() => this.emitOptionChangedEvent()}
+        />
+        <p>${option.value}%</p>
+      </div>
+    `;
+  }
+
   adjustmentCheckbox(option) {
     const formID = `adjustment_${option.id}`;
     return html`<li>
@@ -39,6 +63,7 @@ export class IABookVisualAdjustments extends LitElement {
         <input type="checkbox" name="${formID}" id="${formID}" @change=${() => this.changeActiveStateFor(option.id)} ?checked=${option.active} />
         <span class="icon"></span>
       </label>
+      ${option.value !== undefined ? this.rangeSlider(option) : nothing}
     </li>`;
   }
 

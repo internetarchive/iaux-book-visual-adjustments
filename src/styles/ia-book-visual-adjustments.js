@@ -73,4 +73,16 @@ label {
 :checked + .icon {
   background-image: url('${checkmarkIcon}');
 }
+
+.range {
+  display: none;
+  padding-top: .5rem;
+}
+.range.visible {
+  display: flex;
+}
+
+.range p {
+  margin-left: 1rem;
+}
 `;
