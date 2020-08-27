@@ -29,10 +29,17 @@ The only property is an array of options. Each option has these properties:
 {
   id: 'contrast', // Identifier for adjustment type
   name: 'Use increased contrast', // Name of adjustment rendered as label text
-  description: 'Pages will display as high-contrast black and white images.', // More info on adjustment
   active: false, // Checked state of option
 }
 ```
+
+## Events
+
+When an option is changed, the 'visualAdjustmentOptionChanged' event is emitted.
+The detail object on the event object receives the complete array of options to
+allow BookReader to collect all active adjustments and add CSS to the image
+containers. An example of listening to this event and altering an image can be
+found in the demo.
 
 ## Linting with ESLint
 To scan the project for linting errors, run
