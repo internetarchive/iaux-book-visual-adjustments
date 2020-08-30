@@ -83,17 +83,6 @@ export class IABookVisualAdjustments extends LitElement {
     }));
   }
 
-  unsetSelectedMenuOption(e) {
-    e.preventDefault();
-    this.dispatchEvent(new CustomEvent('menuTypeSelected', {
-      bubbles: true,
-      composed: true,
-      detail: {
-        id: 'adjustment',
-      },
-    }));
-  }
-
   render() {
     return html`
       <header>
