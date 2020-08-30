@@ -13,8 +13,8 @@ export default css`
 
 header {
   display: flex;
-  justify-content: space-between;
   align-items: baseline;
+  padding-right: calc(var(--closeMenuIconWidth) + 1.5rem);
 }
 
 h3 {
@@ -29,21 +29,6 @@ header p {
   font-size: 1.2rem;
   font-weight: bold;
   font-style: italic;
-}
-
-header div {
-  display: flex;
-  align-items: baseline;
-}
-
-a.close {
-  justify-self: end;
-}
-
-a.close svg {
-  width: 18px;
-  height: 18px;
-  fill: var(--iconFillColor);
 }
 
 ul {
