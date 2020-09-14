@@ -14,7 +14,6 @@ export default css`
 header {
   display: flex;
   align-items: baseline;
-  padding-right: calc(var(--closeMenuIconWidth) + 1.5rem);
 }
 
 h3 {
