@@ -1,7 +1,6 @@
 import { html, LitElement } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { nothing } from 'lit-html';
-import closeIcon from '@internetarchive/icon-collapse-sidebar';
 import bookVisualAdjustmentsCSS from './styles/ia-book-visual-adjustments.js';
 
 export class IABookVisualAdjustments extends LitElement {
@@ -84,25 +83,11 @@ export class IABookVisualAdjustments extends LitElement {
     }));
   }
 
-  unsetSelectedMenuOption(e) {
-    e.preventDefault();
-    this.dispatchEvent(new CustomEvent('menuTypeSelected', {
-      bubbles: true,
-      composed: true,
-      detail: {
-        id: 'adjustment',
-      },
-    }));
-  }
-
   render() {
     return html`
       <header>
-        <div>
-          <h3>Visual adjustments</h3>
-          ${this.activeAdjustments}
-        </div>
-        <a href="#" class="close" @click=${this.unsetSelectedMenuOption}>${closeIcon}</a>
+        <h3>Visual adjustments</h3>
+        ${this.activeAdjustments}
       </header>
       <ul>${repeat(this.options, option => option.id, this.adjustmentCheckbox.bind(this))}</ul>
     `;

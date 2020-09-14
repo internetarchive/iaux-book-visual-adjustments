@@ -1,9 +1,4 @@
-import {
-  html,
-  fixture,
-  expect,
-  oneEvent,
-} from '@open-wc/testing';
+import { html, fixture, expect } from '@open-wc/testing';
 import sinon from 'sinon';
 import { IABookVisualAdjustments } from '../src/ia-book-visual-adjustments.js';
 
@@ -54,26 +49,6 @@ describe('<ia-book-visual-adjustments>', () => {
     const checkbox = label.querySelector('input');
     expect(name.innerText).to.equal(options[0].name);
     expect(checkbox.checked).to.equal(true);
-  });
-
-  it('emits a custom event to close the menu', async () => {
-    const el = await fixture(container());
-
-    setTimeout(() => (
-      el.unsetSelectedMenuOption(new Event('click'))
-    ));
-    const response = await oneEvent(el, 'menuTypeSelected');
-
-    expect(response).to.exist;
-  });
-
-  it('closes the menu when close element clicked', async () => {
-    IABookVisualAdjustments.prototype.unsetSelectedMenuOption = sinon.fake();
-
-    const el = await fixture(container());
-
-    el.shadowRoot.querySelector('.close').click();
-    expect(el.unsetSelectedMenuOption.callCount).to.equal(1);
   });
 
   it('renders active options count', async () => {
