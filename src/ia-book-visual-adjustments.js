@@ -27,6 +27,11 @@ export class IABookVisualAdjustments extends LitElement {
     this.activeCount = 0;
   }
 
+  firstUpdated() {
+    this.activeCount = this.activeOptions.length;
+    this.emitOptionChangedEvent();
+  }
+
   /** Gets list of active options
    * @return array
    */
