@@ -79,8 +79,23 @@
     import '@internetarchive/ia-menu-slider/ia-menu-slider';
     import '../ia-book-visual-adjustments.js';
 
+    // catch initial event thrown at `firstUpdate`
+    const img = document.querySelector('img');
+    document.addEventListener('visualAdjustmentOptionChanged', ({ detail }) => {
+        console.log('*visualAdjustmentOptionChanged*', detail);
+        const adjustments = {
+          brightness: (value) => `brightness(${value}%)`,
+          contrast: (value) => `contrast(${value}%)`,
+          grayscale: () => "grayscale(100%)",
+          invert: () => "invert(100%)",
+        };
+        const filters = detail.options.reduce((values, option) => {
+          const newValue = `${option.active ? adjustments[option.id](option.value) : ''}`;
+          return newValue ? [...values, newValue] : values;
+        }, []).join(' ');
 
-    document.addEventListener('visualAdjustmentOptionChanged', (event) => console.log("visualAdjustmentOptionChanged: ", event));
+        img.style.setProperty('filter', filters);
+    });
 
     const menuSlider = document.createElement('ia-menu-slider');
     const visualAdjustmentOptions = [{
@@ -140,23 +155,6 @@
         menuSlider.open = !menuSlider.open;
       });
 
-      const img = document.querySelector('img');
-
-      document.addEventListener('visualAdjustmentOptionChanged', ({ detail }) => {
-        console.log('*visualAdjustmentOptionChanged*', detail);
-        const adjustments = {
-          brightness: (value) => `brightness(${value}%)`,
-          contrast: (value) => `contrast(${value}%)`,
-          grayscale: () => "grayscale(100%)",
-          invert: () => "invert(100%)",
-        };
-        const filters = detail.options.reduce((values, option) => {
-          const newValue = `${option.active ? adjustments[option.id](option.value) : ''}`;
-          return newValue ? [...values, newValue] : values;
-        }, []).join(' ');
-
-        img.style.setProperty('filter', filters);
-      });
     });
   </script>
 </body>
