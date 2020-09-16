@@ -42,20 +42,28 @@ export class IABookVisualAdjustments extends LitElement {
   }
 
   /**
+   * Returns blob that will be emitted by event
+   */
+  prepareEventDetails(changedOptionId = '') {
+    return {
+      options: this.options,
+      activeCount: this.activeCount,
+      changedOptionId,
+    };
+  }
+
+  /**
    * Fires custom event when options change
    * Provides state details: { options, activeCount, changedOptionId }
    *
    * @param { string } changedOptionId
    */
-  emitOptionChangedEvent(changedOptionId) {
+  emitOptionChangedEvent(changedOptionId = '') {
+    const detail = this.prepareEventDetails(changedOptionId);
     this.dispatchEvent(new CustomEvent(events.optionChange, {
       bubbles: true,
       composed: true,
-      detail: {
-        options: this.options,
-        activeCount: this.activeCount,
-        changedOptionId,
-      },
+      detail,
     }));
   }
 
