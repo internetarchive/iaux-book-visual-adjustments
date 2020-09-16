@@ -19,8 +19,8 @@
       --animationTiming: .25s;
       --iconFillColor: #fff;
       --iconStrokeColor: #fff;
-      --iconWidth: 28px;
-      --iconHeight: 28px;
+      --iconWidth: 20px;
+      --iconHeight: 20px;
       --activeButtonBg: #282828;
     }
 
@@ -110,10 +110,22 @@
         <ia-icon-visual-adjustment></ia-icon-visual-adjustment>
       `,
       label: 'Visual Adjustments',
+      title: 'Visual Adjustments',
       id: 'adjustment',
       component: html`<ia-book-visual-adjustments .options=${visualAdjustmentOptions}></ia-book-visual-adjustments>`
     };
-    menuSlider.menus = [adjustmentMenu];
+    const adjustmentMenuWithHeader = {
+      icon: html`
+        <ia-icon-visual-adjustment></ia-icon-visual-adjustment>
+      `,
+      label: 'Visual Adjustments',
+      id: 'adjustment-with-header',
+      component: html`<ia-book-visual-adjustments
+        .options=${visualAdjustmentOptions}
+        ?renderHeader=${true}
+      ></ia-book-visual-adjustments>`
+    };
+    menuSlider.menus = [adjustmentMenu, adjustmentMenuWithHeader];
     menuSlider.open = true;
     menuSlider.selectedMenu = adjustmentMenu.id;
 
@@ -128,6 +140,7 @@
       const img = document.querySelector('img');
 
       document.addEventListener('visualAdjustmentOptionChanged', ({ detail }) => {
+        console.log('*visualAdjustmentOptionChanged*', detail);
         const adjustments = {
           brightness: (value) => `brightness(${value}%)`,
           contrast: (value) => `contrast(${value}%)`,
