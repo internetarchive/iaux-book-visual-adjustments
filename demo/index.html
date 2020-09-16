@@ -123,38 +123,26 @@
       name: 'Inverted colors (negative image)',
       active: false,
     }];
+
     const adjustmentMenu = {
       icon: html`
         <ia-icon-visual-adjustment></ia-icon-visual-adjustment>
       `,
       label: 'Visual Adjustments',
-      title: 'Visual Adjustments',
+      menuDetails: '(click to see the possibilities)',
       id: 'adjustment',
-      component: html`<ia-book-visual-adjustments .options=${visualAdjustmentOptions}></ia-book-visual-adjustments>`
+      component: html`<ia-book-visual-adjustments ?renderHeader=${true} .options=${visualAdjustmentOptions}></ia-book-visual-adjustments>`
     };
-    const adjustmentMenuWithHeader = {
-      icon: html`
-        <ia-icon-visual-adjustment></ia-icon-visual-adjustment>
-      `,
-      label: 'Visual Adjustments',
-      id: 'adjustment-with-header',
-      component: html`<ia-book-visual-adjustments
-        .options=${visualAdjustmentOptions}
-        ?renderHeader=${true}
-      ></ia-book-visual-adjustments>`
-    };
-    menuSlider.menus = [adjustmentMenu, adjustmentMenuWithHeader];
+
+    menuSlider.menus = [adjustmentMenu];
     menuSlider.open = true;
     menuSlider.selectedMenu = adjustmentMenu.id;
-
     document.querySelector('#menu').appendChild(menuSlider);
-
     menuSlider.updateComplete.then(() => {
       // Toggle button for menu drawer
       document.querySelector('button').addEventListener('click', () => {
         menuSlider.open = !menuSlider.open;
       });
-
     });
   </script>
 </body>
