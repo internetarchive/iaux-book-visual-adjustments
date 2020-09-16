@@ -23,8 +23,8 @@ const options = [{
   value: 100,
 }];
 
-const container = () => (
-  html`<ia-book-visual-adjustments .options=${options}></ia-book-visual-adjustments>`
+const container = (renderHeader = false) => (
+  html`<ia-book-visual-adjustments .options=${options} ?renderHeader=${renderHeader}></ia-book-visual-adjustments>`
 );
 
 describe('<ia-book-visual-adjustments>', () => {
