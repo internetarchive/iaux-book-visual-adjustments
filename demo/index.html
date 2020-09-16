@@ -79,11 +79,14 @@
     import '@internetarchive/ia-menu-slider/ia-menu-slider';
     import '../ia-book-visual-adjustments.js';
 
+
+    document.addEventListener('visualAdjustmentOptionChanged', (event) => console.log("visualAdjustmentOptionChanged: ", event));
+
     const menuSlider = document.createElement('ia-menu-slider');
     const visualAdjustmentOptions = [{
       id: 'grayscale',
       name: 'Grayscale',
-      active: false,
+      active: true,
     }, {
       id: 'brightness',
       name: 'Adjust brightness',
