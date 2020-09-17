@@ -3,6 +3,9 @@ import { repeat } from 'lit-html/directives/repeat.js';
 import { nothing } from 'lit-html';
 import bookVisualAdjustmentsCSS from './styles/ia-book-visual-adjustments.js';
 
+const events = {
+  optionChange: 'visualAdjustmentOptionChanged',
+};
 export class IABookVisualAdjustments extends LitElement {
   static get styles() {
     return bookVisualAdjustmentsCSS;
@@ -10,25 +13,74 @@ export class IABookVisualAdjustments extends LitElement {
 
   static get properties() {
     return {
+      renderHeader: { type: Boolean },
       options: { type: Array },
+      activeCount: { type: Number },
     };
   }
 
   constructor() {
     super();
 
+    this.renderHeader = false;
     this.options = [];
+    this.activeCount = 0;
   }
 
+  firstUpdated() {
+    this.activeCount = this.activeOptions.length;
+    this.emitOptionChangedEvent();
+  }
+
+  /** Gets list of active options
+   * @return array
+   */
   get activeOptions() {
     return this.options.reduce((results, option) => (
       option.active ? [...results, option.id] : results
     ), []);
   }
 
-  get activeAdjustments() {
-    const count = this.activeOptions.length;
-    return count ? html`<p>(${count} active)</p>` : nothing;
+  /**
+   * Returns blob that will be emitted by event
+   */
+  prepareEventDetails(changedOptionId = '') {
+    return {
+      options: this.options,
+      activeCount: this.activeCount,
+      changedOptionId,
+    };
+  }
+
+  /**
+   * Fires custom event when options change
+   * Provides state details: { options, activeCount, changedOptionId }
+   *
+   * @param { string } changedOptionId
+   */
+  emitOptionChangedEvent(changedOptionId = '') {
+    const detail = this.prepareEventDetails(changedOptionId);
+    this.dispatchEvent(new CustomEvent(events.optionChange, {
+      bubbles: true,
+      composed: true,
+      detail,
+    }));
+  }
+
+  /**
+   * Updates adjustment & component state
+   * updates params of available ajdustment options list
+   * updates active adjustment count
+   * triggers custom event
+   * @param { string } optionName
+   */
+  changeActiveStateFor(optionName) {
+    const updatedOptions = [...this.options];
+    const checkedOption = updatedOptions.find(option => option.id === optionName);
+    checkedOption.active = !checkedOption.active;
+    this.options = updatedOptions;
+    this.activeCount = this.activeOptions.length;
+    this.emitOptionChangedEvent(checkedOption.id);
   }
 
   setRangeValue(id, value) {
@@ -37,6 +89,7 @@ export class IABookVisualAdjustments extends LitElement {
     this.options = [...updatedOptions];
   }
 
+  /* render */
   rangeSlider(option) {
     return html`
       <div class=${`range${option.active ? ' visible' : ''}`}>
@@ -67,28 +120,19 @@ export class IABookVisualAdjustments extends LitElement {
     </li>`;
   }
 
-  changeActiveStateFor(id) {
-    const updatedOptions = [...this.options];
-    const checkedOption = updatedOptions.find(option => option.id === id);
-    checkedOption.active = !checkedOption.active;
-    this.options = updatedOptions;
-    this.emitOptionChangedEvent();
+  get headerSection() {
+    const activeAdjustments = this.activeCount ? html`<p>(${this.activeCount} active)</p>` : nothing;
+    const header = html`<header>
+      <h3>Visual adjustments</h3>
+      ${activeAdjustments}
+    </header>`;
+    return this.renderHeader ? header : nothing;
   }
 
-  emitOptionChangedEvent() {
-    this.dispatchEvent(new CustomEvent('visualAdjustmentOptionChanged', {
-      bubbles: true,
-      composed: true,
-      detail: { options: this.options },
-    }));
-  }
-
+  /** @inheritdoc */
   render() {
     return html`
-      <header>
-        <h3>Visual adjustments</h3>
-        ${this.activeAdjustments}
-      </header>
+      ${this.headerSection}
       <ul>${repeat(this.options, option => option.id, this.adjustmentCheckbox.bind(this))}</ul>
     `;
   }

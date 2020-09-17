@@ -23,8 +23,8 @@ const options = [{
   value: 100,
 }];
 
-const container = () => (
-  html`<ia-book-visual-adjustments .options=${options}></ia-book-visual-adjustments>`
+const container = (renderHeader = false) => (
+  html`<ia-book-visual-adjustments .options=${options} ?renderHeader=${renderHeader}></ia-book-visual-adjustments>`
 );
 
 describe('<ia-book-visual-adjustments>', () => {
@@ -37,6 +37,10 @@ describe('<ia-book-visual-adjustments>', () => {
 
     expect(el.options).to.exist;
     expect(el.options.length).to.equal(options.length);
+    expect(el.renderHeader).to.exist;
+    expect(el.renderHeader).to.be.false;
+    expect(el.activeCount).to.exist;
+    expect(el.renderHeader).to.be.false;
   });
 
   it('renders all properties of a visual adjustment option', async () => {
@@ -51,9 +55,9 @@ describe('<ia-book-visual-adjustments>', () => {
     expect(checkbox.checked).to.equal(true);
   });
 
-  it('renders active options count', async () => {
-    const el = await fixture(container());
-
+  it('can render header with active options count', async () => {
+    const renderHeader = true;
+    const el = await fixture(container(renderHeader));
     expect(el.shadowRoot.querySelector('header p').innerText).to.include('1');
   });
 
@@ -75,22 +79,53 @@ describe('<ia-book-visual-adjustments>', () => {
     expect(el.options[0].active).to.equal(false);
   });
 
-  it('triggers an emitOptionChangedEvent event when a checkbox\'s change event fires', async () => {
-    IABookVisualAdjustments.prototype.emitOptionChangedEvent = sinon.fake();
+  describe('Custom events', () => {
+    it('prepareEventDetails returns proper params', async () => {
+      const el = await fixture(container());
+      await el.updateComplete;
+      const params = el.prepareEventDetails();
 
-    const el = await fixture(container());
+      expect(params.activeCount).to.exist;
+      expect(typeof (params.activeCount)).to.be.equal('number');
+      expect(params.changedOptionId).to.exist;
+      expect(typeof (params.changedOptionId)).to.be.equal('string');
+      expect(params.options).to.exist;
+      expect(params.options.length).to.exist;
+      expect(params.options.length).to.be.greaterThan(0);
+    });
+    it('emitOptionChangedEvent calls for the params', async () => {
+      IABookVisualAdjustments.prototype.prepareEventDetails = sinon.fake();
+      const el = await fixture(container());
+      await el.updateComplete;
 
-    el.shadowRoot.querySelector('li input').dispatchEvent(new Event('change'));
-    expect(el.emitOptionChangedEvent.callCount).to.equal(1);
-  });
+      expect(el.prepareEventDetails.callCount).to.equal(1);
+    });
+    it('triggers an emitOptionChangedEvent event at firstUpdate', async () => {
+      IABookVisualAdjustments.prototype.emitOptionChangedEvent = sinon.fake();
+      const el = await fixture(container());
 
-  it('triggers an emitOptionChangedEvent event when a range\'s change event fires', async () => {
-    IABookVisualAdjustments.prototype.emitOptionChangedEvent = sinon.fake();
+      expect(el.emitOptionChangedEvent.callCount).to.equal(1);
+    });
 
-    const el = await fixture(container());
+    it('triggers an emitOptionChangedEvent event when a checkbox\'s change event fires', async () => {
+      IABookVisualAdjustments.prototype.emitOptionChangedEvent = sinon.fake();
+      const el = await fixture(container());
 
-    el.shadowRoot.querySelector('[name="brightness_range"]').dispatchEvent(new Event('change'));
-    expect(el.emitOptionChangedEvent.callCount).to.equal(1);
+      expect(el.emitOptionChangedEvent.callCount).to.equal(1); // firstUpdate fire
+
+      el.shadowRoot.querySelector('li input').dispatchEvent(new Event('change'));
+      expect(el.emitOptionChangedEvent.callCount).to.equal(2);
+    });
+
+    it('triggers an emitOptionChangedEvent event when a range\'s change event fires', async () => {
+      IABookVisualAdjustments.prototype.emitOptionChangedEvent = sinon.fake();
+
+      const el = await fixture(container());
+      expect(el.emitOptionChangedEvent.callCount).to.equal(1); // firstUpdate fire
+
+      el.shadowRoot.querySelector('[name="brightness_range"]').dispatchEvent(new Event('change'));
+      expect(el.emitOptionChangedEvent.callCount).to.equal(2);
+    });
   });
 
   it('sets range defaults when none supplied', async () => {
