@@ -24,7 +24,12 @@
           "default": 0
         }
       ],
-      "events": [],
+      "events": [
+        {
+          "name": "visualAdjustmentOptionChanged",
+          "description": "Fires when options have loaded or changed"
+        }
+      ],
       "slots": [],
       "cssProperties": []
     }
