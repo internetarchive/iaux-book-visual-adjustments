@@ -1,4 +1,9 @@
-import { html, fixture, expect } from '@open-wc/testing';
+import {
+  html,
+  fixture,
+  expect,
+  oneEvent,
+} from '@open-wc/testing';
 import sinon from 'sinon';
 import { IABookVisualAdjustments } from '../src/ia-book-visual-adjustments.js';
 
@@ -40,7 +45,7 @@ describe('<ia-book-visual-adjustments>', () => {
     expect(el.renderHeader).to.exist;
     expect(el.renderHeader).to.be.false;
     expect(el.activeCount).to.exist;
-    expect(el.renderHeader).to.be.false;
+    expect(el.showZoomControls).to.be.true;
   });
 
   it('renders all properties of a visual adjustment option', async () => {
@@ -77,6 +82,23 @@ describe('<ia-book-visual-adjustments>', () => {
     await el.updateComplete;
 
     expect(el.options[0].active).to.equal(false);
+  });
+
+  it('renders zoom in and out controls when enabled', async () => {
+    const el = await fixture(container());
+
+    expect(el.shadowRoot.querySelector('.zoom_out')).to.exist;
+    expect(el.shadowRoot.querySelector('.zoom_in')).to.exist;
+  });
+
+  it('does not render zoom controls when disabled', async () => {
+    const el = await fixture(container());
+
+    el.showZoomControls = false;
+    await el.updateComplete;
+
+    expect(el.shadowRoot.querySelector('.zoom_out')).not.to.exist;
+    expect(el.shadowRoot.querySelector('.zoom_in')).not.to.exist;
   });
 
   describe('Custom events', () => {
@@ -125,6 +147,28 @@ describe('<ia-book-visual-adjustments>', () => {
 
       el.shadowRoot.querySelector('[name="brightness_range"]').dispatchEvent(new Event('change'));
       expect(el.emitOptionChangedEvent.callCount).to.equal(2);
+    });
+
+    it('emits a zoom out event when zoom out button clicked', async () => {
+      const el = await fixture(container());
+
+      setTimeout(() => (
+        el.shadowRoot.querySelector('.zoom_out').click()
+      ));
+      const response = await oneEvent(el, 'visualAdjustmentZoomOut');
+
+      expect(response).to.exist;
+    });
+
+    it('emits a zoom in event when zoom in button clicked', async () => {
+      const el = await fixture(container());
+
+      setTimeout(() => (
+        el.shadowRoot.querySelector('.zoom_in').click()
+      ));
+      const response = await oneEvent(el, 'visualAdjustmentZoomIn');
+
+      expect(response).to.exist;
     });
   });
 

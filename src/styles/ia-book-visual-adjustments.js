@@ -72,4 +72,28 @@ label {
 .range p {
   margin-left: 1rem;
 }
+
+h4 {
+  padding: 1rem 0;
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+button {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  --iconWidth: 40px;
+  --iconHeight: 40px;
+  --iconFillColor: var(--primaryTextColor);
+  --iconStrokeColor: var(--primaryTextColor);
+}
+
+button * {
+  display: inline-block;
+}
 `;
