@@ -22,12 +22,26 @@
           "type": "Integer",
           "description": "Count of active adjustments",
           "default": 0
+        },
+        {
+          "name": "showZoomControls",
+          "type": "Boolean",
+          "description": "Toggles rendering of zoom controls",
+          "default": true
         }
       ],
       "events": [
         {
           "name": "visualAdjustmentOptionChanged",
           "description": "Fires when options have loaded or changed"
+        },
+        {
+          "name": "visualAdjustmentZoomIn",
+          "description": "Zoom in button clicked"
+        },
+        {
+          "name": "visualAdjustmentZoomOut",
+          "description": "Zoom out button clicked"
         }
       ],
       "slots": [],

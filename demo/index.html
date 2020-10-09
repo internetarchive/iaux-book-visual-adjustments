@@ -124,6 +124,9 @@
       active: false,
     }];
 
+    const zoomInCallback = () => console.log('zoom in clicked');
+    const zoomOutCallback = () => console.log('zoom out clicked');
+
     const adjustmentMenu = {
       icon: html`
         <ia-icon-visual-adjustment></ia-icon-visual-adjustment>
@@ -131,7 +134,14 @@
       label: 'Visual Adjustments',
       menuDetails: '(click to see the possibilities)',
       id: 'adjustment',
-      component: html`<ia-book-visual-adjustments ?renderHeader=${true} .options=${visualAdjustmentOptions}></ia-book-visual-adjustments>`
+      component: html`
+        <ia-book-visual-adjustments
+          ?renderHeader=${true}
+          .options=${visualAdjustmentOptions}
+          @visualAdjustmentZoomIn=${zoomInCallback}
+          @visualAdjustmentZoomOut=${zoomOutCallback}
+        ></ia-book-visual-adjustments>
+      `
     };
 
     menuSlider.menus = [adjustmentMenu];

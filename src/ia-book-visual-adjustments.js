@@ -2,10 +2,17 @@ import { html, LitElement } from 'lit-element';
 import { repeat } from 'lit-html/directives/repeat.js';
 import { nothing } from 'lit-html';
 import bookVisualAdjustmentsCSS from './styles/ia-book-visual-adjustments.js';
+import '@internetarchive/icon-magnify-minus/icon-magnify-minus';
+import '@internetarchive/icon-magnify-plus/icon-magnify-plus';
+
+const namespacedEvent = eventName => `visualAdjustment${eventName}`;
 
 const events = {
-  optionChange: 'visualAdjustmentOptionChanged',
+  optionChange: namespacedEvent('OptionChanged'),
+  zoomIn: namespacedEvent('ZoomIn'),
+  zoomOut: namespacedEvent('ZoomOut'),
 };
+
 export class IABookVisualAdjustments extends LitElement {
   static get styles() {
     return bookVisualAdjustmentsCSS;
@@ -13,18 +20,20 @@ export class IABookVisualAdjustments extends LitElement {
 
   static get properties() {
     return {
-      renderHeader: { type: Boolean },
-      options: { type: Array },
       activeCount: { type: Number },
+      options: { type: Array },
+      renderHeader: { type: Boolean },
+      showZoomControls: { type: Boolean },
     };
   }
 
   constructor() {
     super();
 
-    this.renderHeader = false;
-    this.options = [];
     this.activeCount = 0;
+    this.options = [];
+    this.renderHeader = false;
+    this.showZoomControls = true;
   }
 
   firstUpdated() {
@@ -65,6 +74,14 @@ export class IABookVisualAdjustments extends LitElement {
       composed: true,
       detail,
     }));
+  }
+
+  emitZoomIn() {
+    this.dispatchEvent(new CustomEvent(events.zoomIn));
+  }
+
+  emitZoomOut() {
+    this.dispatchEvent(new CustomEvent(events.zoomOut));
   }
 
   /**
@@ -129,11 +146,24 @@ export class IABookVisualAdjustments extends LitElement {
     return this.renderHeader ? header : nothing;
   }
 
+  get zoomControls() {
+    return html`
+      <h4>Zoom</h4>
+      <button class="zoom_out" @click=${this.emitZoomOut} title="zoom out">
+        <ia-icon-magnify-minus></ia-icon-magnify-minus>
+      </button>
+      <button class="zoom_in" @click=${this.emitZoomIn} title="zoom in">
+        <ia-icon-magnify-plus></ia-icon-magnify-plus>
+      </button>
+    `;
+  }
+
   /** @inheritdoc */
   render() {
     return html`
       ${this.headerSection}
       <ul>${repeat(this.options, option => option.id, this.adjustmentCheckbox.bind(this))}</ul>
+      ${this.showZoomControls ? this.zoomControls : nothing}
     `;
   }
 }

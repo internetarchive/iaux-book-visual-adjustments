@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "@internetarchive/icon-collapse-sidebar": "^1.1.0",
+    "@internetarchive/icon-magnify-minus": "^1.2.0",
+    "@internetarchive/icon-magnify-plus": "^1.2.0",
     "lit-element": "^2.2.1",
     "lit-html": "^1.1.2"
   },
