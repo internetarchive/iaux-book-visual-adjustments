@@ -87,10 +87,10 @@ button {
   background: transparent;
   outline: none;
   cursor: pointer;
-  --iconWidth: 40px;
-  --iconHeight: 40px;
   --iconFillColor: var(--primaryTextColor);
   --iconStrokeColor: var(--primaryTextColor);
+  height: 4rem;
+  width: 4rem;
 }
 
 button * {
