@@ -32,6 +32,7 @@ header p {
 ul {
   padding: 1rem 2rem 0 0;
   list-style: none;
+  margin-top: 0;
 }
 
 [type="checkbox"] {
