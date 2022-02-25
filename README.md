@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.com/internetarchive/iaux-book-visual-adjustments.svg?branch=master)](https://travis-ci.com/internetarchive/iaux-book-visual-adjustments)
 [![codecov](https://codecov.io/gh/internetarchive/iaux-book-visual-adjustments/branch/master/graph/badge.svg)](https://codecov.io/gh/internetarchive/iaux-book-visual-adjustments)
 
+# Deprecated. See [@internetarchive/bookreader](https://github.com/internetarchive/bookreader)
+
 # \<ia-book-visual-adjustments>
 
 This webcomponent follows the [open-wc](https://github.com/open-wc/open-wc) recommendation.
